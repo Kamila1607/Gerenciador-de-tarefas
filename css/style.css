@@ -1,7 +1,38 @@
 body {
-    background-color: #ccc;
+    background-color: rgb(133, 187, 231);
 }
-
 .btn-login {
     width: 105px !important;
+}
+.badge {
+    padding-left: 4px;
+    padding-right: 4px;
+    opacity: 0.7;
+    border-radius: 8px;
+    color: black;
+}
+.lowPriority {
+    background-color: rgba(119, 248, 87, 0.877);
+}
+.mediumPriority {
+    background-color: rgb(243, 236, 34);
+}
+.highPriority {
+    background-color: rgb(255, 0, 0);
+}
+.text-decoration-none {
+    text-decoration: none !important;
+}
+
+.rounded-10{
+    border-radius: 10px;
+}
+
+.search{
+    margin-left: 5px;
+    border: none;
+    border-bottom: solid 1px #eee;
+    font-size: 16px;
+    color: rgba(var(--bs--light--rgb), var(--bs--bg--opacity));
+    background-color: rgba(var(--bs--light--rgb), var(--bs--bg--opacity)) ;
 }

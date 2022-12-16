@@ -1,4 +1,3 @@
-// VARIAVEIS GLOBAIS
 var taskId = 0;         
 var taskName;       
 var taskResponsible;
@@ -6,27 +5,21 @@ var taskDescription;
 var taskDate;       
 var taskPriority;   
 var taskStatus;     
-
 function logar() {
-    const usuario = 'Cafu';
+    const usuario = 'cafu';
     const senha = 'escova';
-
     var name = document.getElementById('name').value;    
     var pass = document.getElementById('password').value;
-
     if (usuario === name && senha === pass) {    
         var nameUser = document.getElementById('nameUser');
         nameUser.textContent = name;
-        
         document.getElementById('name').classList.add('d-none');
         document.getElementById('password').classList.add('d-none');
         document.getElementById('btnLogin').classList.add('d-none');
         document.getElementById('nameUser').classList.remove('d-none');
         document.getElementById('btnLogout').classList.remove('d-none');
-
         document.getElementById('name').value = "";
         document.getElementById('password').value = "";
-
         document.getElementById('new_task').classList.remove('d-none');
     } else {
         document.getElementById('name').style.border = "solid 2px red";
@@ -34,25 +27,20 @@ function logar() {
         alert('Usuário ou senha incorretos.')
     }
 }
-
 jQuery(document.body).on('keypress', function(event){
     if(event.keyCode === 13) {
         event.preventDefault();
         $('#btnLogin').trigger('click');
     }    
 });
-
 function deslogar() {
     document.getElementById('nameUser').classList.add('d-none');    
     document.getElementById('btnLogout').classList.add('d-none');
-
     document.getElementById('name').classList.remove('d-none');
     document.getElementById('password').classList.remove('d-none');
     document.getElementById('btnLogin').classList.remove('d-none');
-
     document.getElementById('new_task').classList.add('d-none');
 }
-
 function saveTask() {
     taskId          = $('#task_id').val();
     taskName        = $('#task_name').val();
@@ -62,12 +50,16 @@ function saveTask() {
     taskPriority    = $('#task_priority').val();
     taskStatus      = $('#task_status').val();
 
-    this.formValidate(taskName, taskDate, taskPriority, taskStatus);
+    var statusId = taskStatus;
 
+    
+
+    var validate = this.formValidate(taskName, taskDate, taskPriority, taskStatus);
+    this.formatInputs(taskDate, taskPriority, taskStatus);
     var taskCard = 
     " <div class='card mb-4 text-left p-3 border-0' id=''> " +
     "   <div class='pb-3'> " +
-    "       <a href='#' class='' id='name'> " +
+    "       <a href='#' class='text-decoration-none' id='name'> " +
                 taskName +
     "       </a> " +
     "   </div> " +
@@ -84,37 +76,100 @@ function saveTask() {
     "       <i class='fa fa-user pe-2' id='responsible'></i> " +
             taskResponsible +
     "   </div> " +
-    "   <div id='priority'> " +
+    "   <div id='priority'>" +
             taskPriority +
     "   </div> " +
     "   <div id='status' class='d-none'> " +
             taskStatus +
     "   </div> " +
     " </div>";
-
-    $('#do_card_content').append(taskCard);
+    if (validate) { //subentendido o 
+        this.setTaskCard(statusId, taskCard)
+    }
 }
 
-function formValidate(taskName, taskResponsible, taskDate, taskPriority, taskStatus) {
-    var values = [1, 2, 3];
+function setTaskCard(statusId,taskCard){
+    var card;
 
+    switch(statusId){
+        case '1':
+            card = $('#do_card_content').append(taskCard);
+            break;
+        case '2':
+            card = $('#doing_card_content').append(taskCard);
+            break;
+        case '3':
+            card = $('#done_card_content').append(taskCard);
+            break;
+        default:
+            alert(ERRO);
+            break;    
+    }
+
+    return card;
+}
+
+function formValidate(taskName, taskDate, taskPriority, taskStatus) {
+    var result = true;
     if (taskName === '') {
         alert('Digite um nome para tarefa');
+        result = false;
     }
-
-    if (taskResponsible === '') {
-        alert('Digite um responsável para tarefa');
-    }    
-
     if (taskDate === '') {
         alert('Digite uma data para tarefa');
+        result = false;
     }
-
-    if (!values.includes(taskPriority)) {
+    if (taskPriority === '') {
         alert('Informe uma prioridade');
-    }
-
-    if (!values.includes(taskStatus)) {
-        alert('Informe um status');
+        result = false;
     }    
+    if (taskStatus === '') {
+        alert('Informe um status');
+        result = false;
+    }
+    return result;
+}
+function formatInputs(taskDate, taskPriority, taskStatus ) {
+    this.taskDate       = taskDate.split('-').reverse().join('/');
+    this.taskPriority   = this.getPriorityName(taskPriority);
+    this.taskStatus     = this.getStatusName(taskStatus);
+}
+//Função para pegar texto da prioridade
+function getPriorityName (idPriority) {
+    var PriorityName;
+    var classColor;
+    switch(idPriority) {
+        case '1':
+            PriorityName = 'Baixa';
+            classColor = 'lowPriority';
+            break;
+        case '2':
+            PriorityName = 'Média';
+            classColor = 'mediumPriority';
+            break;
+        case '3':
+            PriorityName = 'Alta';
+            classColor = 'highPriority';
+            break;
+        default:
+            PriorityName = 'Não definida';
+            break;
+    }
+    return "<span class='badge " + classColor + "'>" + PriorityName + "</span>";
+}
+function getStatusName (taskStatus) {
+    switch(taskStatus) {
+        case '1':
+            return 'Fazer';
+            break;
+        case '2':
+            return 'Fazendo';
+            break;
+        case '3':
+            return 'Finalizada';
+            break;
+        default:
+            return 'Não definida';
+            break;
+    }
 }
