@@ -1,10 +1,18 @@
-var taskId = 0;         
+var taskId = 0;
+var taskIdForm;         
 var taskName;       
 var taskResponsible;
 var taskDescription;
 var taskDate;       
 var taskPriority;   
-var taskStatus;     
+var taskStatus;
+
+this.setTaskId();
+function setTaskId(){
+    this.taskId ++;
+    $('#task_id').val(this.taskId);
+}
+
 function logar() {
     const usuario = 'cafu';
     const senha = 'escova';
@@ -57,7 +65,11 @@ function saveTask() {
     var validate = this.formValidate(taskName, taskDate, taskPriority, taskStatus);
     this.formatInputs(taskDate, taskPriority, taskStatus);
     var taskCard = 
-    " <div class='card mb-4 text-left p-3 border-0' id=''> " +
+    " <div class='card mb-4 text-left p-3 border-0' id='" + taskId + "'>" +
+    "   <div class = 'action-icon'> " +
+    "       <i class='fa fa-pencil pe-2'></i> " +
+    "       <i class='fa fa-trash-can' onclick=deleteTask("+ taskId +")></i>" +
+    "   </div>" +
     "   <div class='pb-3'> " +
     "       <a href='#' class='text-decoration-none' id='name'> " +
                 taskName +
@@ -86,6 +98,7 @@ function saveTask() {
     if (validate) { //subentendido o 
         this.setTaskCard(statusId, taskCard)
     }
+    this.setTaskId();
 }
 
 function setTaskCard(statusId,taskCard){
